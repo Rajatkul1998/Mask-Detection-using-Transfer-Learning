@@ -1,6 +1,6 @@
 from torchvision import datasets, models, transforms
 import torch
-import cv2
+#import cv2
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 from streamlit_webrtc import ClientSettings
 import torch.nn.functional as F
@@ -11,7 +11,7 @@ transform= transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-from PIL import Image
+from PIL import Image,ImageDraw
 
 WEBRTC_CLIENT_SETTINGS = ClientSettings(
         rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
@@ -22,6 +22,7 @@ checkpoint = torch.load('resnet18_final_model.pt',map_location=torch.device("cpu
 resnet.load_state_dict(checkpoint['model_state_dict'])
 
 resnet.eval()
+box=st.empty()
 class VideoTransformer(VideoTransformerBase):
     
         def __init__(self):
@@ -38,11 +39,13 @@ class VideoTransformer(VideoTransformerBase):
             _,prediction=torch.max(output,dim=1)
             print(prediction)
             if(prediction.item()==1):
-                cv2.putText(frame,"No Mask Detected", (40,40), 2, 2, 255)
+                box.text("No Mask")
+               # draw.text(frame,"No Mask Detected", (40,40), 2, 2, 255)
             else: 
-                cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
+                box.text("Mask Detected")
+                #cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
 
-            return frame 
+            return frame
 def webcam():
     webrtc_streamer(key="example", video_transformer_factory=VideoTransformer,client_settings=WEBRTC_CLIENT_SETTINGS,)  
 
@@ -66,7 +69,7 @@ def img_upload():
         st.image(image)    
 
 if __name__=="__main__":
-    webcam()
+    img_upload()
 
 
 
