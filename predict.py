@@ -37,10 +37,10 @@ class VideoTransformer(VideoTransformerBase):
             output=resnet(image)
             _,prediction=torch.max(output,dim=1)
             print(prediction)
-            if(prediction.item()==1):
+            #if(prediction.item()==1):
                 #box.text("No Mask")
               # cv2.putText(frame,"No Mask Detected", (40,40), 2, 2, 255)
-            else: 
+            #else: 
                 #box.text("Mask Detected")
               # cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
 
