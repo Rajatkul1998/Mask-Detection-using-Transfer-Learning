@@ -1,6 +1,6 @@
 from torchvision import datasets, models, transforms
 import torch
-#import cv2
+import cv2
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 from streamlit_webrtc import ClientSettings
 import torch.nn.functional as F
@@ -37,12 +37,12 @@ class VideoTransformer(VideoTransformerBase):
             output=resnet(image)
             _,prediction=torch.max(output,dim=1)
             print(prediction)
-            #if(prediction.item()==1):
+            if(prediction.item()==1):
                 #box.text("No Mask")
-              # cv2.putText(frame,"No Mask Detected", (40,40), 2, 2, 255)
-            #else: 
+               cv2.putText(frame,"No Mask Detected", (40,40), 2, 2, 255)
+            else: 
                 #box.text("Mask Detected")
-              # cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
+               cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
 
             return frame
 def webcam():
@@ -68,7 +68,14 @@ def img_upload():
         st.image(image)    
 
 if __name__=="__main__":
-    img_upload()
+    PAGES = {
+    "Image Upload": img_upload(),
+    "WebCam": webcam()
+    }
+    st.sidebar.title('Navigation')
+    selection = st.sidebar.radio("Go to", list(PAGES.keys()))
+    page = PAGES[selection]
+    #page.app()
 
 
 
