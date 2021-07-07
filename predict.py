@@ -22,7 +22,6 @@ checkpoint = torch.load('resnet18_final_model.pt',map_location=torch.device("cpu
 resnet.load_state_dict(checkpoint['model_state_dict'])
 
 resnet.eval()
-box=st.empty()
 class VideoTransformer(VideoTransformerBase):
     
         def __init__(self):
@@ -31,7 +30,7 @@ class VideoTransformer(VideoTransformerBase):
 
         def transform(self, frame):
             frame= frame.to_ndarray(format="bgr24")
-            #frame=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+            frame=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             image=Image.fromarray(frame)
             image=transform(image)
             image=image.unsqueeze(0)
@@ -39,11 +38,11 @@ class VideoTransformer(VideoTransformerBase):
             _,prediction=torch.max(output,dim=1)
             print(prediction)
             if(prediction.item()==1):
-                box.text("No Mask")
-               # draw.text(frame,"No Mask Detected", (40,40), 2, 2, 255)
+                #box.text("No Mask")
+              # cv2.putText(frame,"No Mask Detected", (40,40), 2, 2, 255)
             else: 
-                box.text("Mask Detected")
-                #cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
+                #box.text("Mask Detected")
+              # cv2.putText(frame,"Mask Detected", (40,40), 2, 2, 255)
 
             return frame
 def webcam():
