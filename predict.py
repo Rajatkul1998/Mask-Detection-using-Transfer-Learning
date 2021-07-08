@@ -2,7 +2,7 @@ from torchvision import datasets, models, transforms
 import torch
 import cv2
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
-from streamlit_webrtc import ClientSettings
+from streamlit_webrtc import ClientSettings,WebRtcMode
 import torch.nn.functional as F
 import streamlit as st 
 from pretrained_model import resnet
@@ -14,7 +14,7 @@ transform= transforms.Compose([
 from PIL import Image,ImageDraw
 
 WEBRTC_CLIENT_SETTINGS = ClientSettings(
-       # rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
         media_stream_constraints={"video": True, "audio": False},
     )
 
@@ -46,7 +46,7 @@ class VideoTransformer(VideoTransformerBase):
 
             return frame
 def webcam():
-    webrtc_streamer(key="example", video_transformer_factory=VideoTransformer,client_settings=WEBRTC_CLIENT_SETTINGS,)  
+    webrtc_streamer(key="mask-detection",mode=WebRtcMode.SENDRECV, video_transformer_factory=VideoTransformer,client_settings=WEBRTC_CLIENT_SETTINGS,async_processing=True,)  
 
 def img_upload():
     uploaded_file = st.file_uploader("Choose an image...", type="jpg")
