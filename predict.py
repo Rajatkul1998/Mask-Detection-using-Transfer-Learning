@@ -68,13 +68,14 @@ def img_upload():
         st.image(image)    
 
 if __name__=="__main__":
-    PAGES = {
-    "Image Upload": img_upload(),
-    "WebCam": webcam()
-    }
-    st.sidebar.title('Navigation')
-    selection = st.sidebar.radio("Go to", list(PAGES.keys()))
-    page = PAGES[selection]
+    img_upload()
+    #PAGES = {
+    #"Image Upload": img_upload(),
+    #"WebCam": webcam()
+    #}
+    #st.sidebar.title('Navigation')
+    #selection = st.sidebar.radio("Go to", list(PAGES.keys()))
+    #page = PAGES[selection]
     #page.app()
 
 
