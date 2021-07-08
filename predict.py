@@ -68,6 +68,7 @@ def img_upload():
         st.image(image)    
 
 if __name__=="__main__":
+    st.title("Mask Detection")
     img_upload()
     #PAGES = {
     #"Image Upload": img_upload(),
