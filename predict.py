@@ -2,7 +2,7 @@ from torchvision import datasets, models, transforms
 import torch
 import cv2
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
-from streamlit_webrtc import ClientSettings,WebRtcMode
+from streamlit_webrtc import ClientSettings,WebRtcMode,VideoProcessorBase
 import torch.nn.functional as F
 import streamlit as st 
 from pretrained_model import resnet
@@ -22,7 +22,7 @@ checkpoint = torch.load('resnet18_final_model.pt',map_location=torch.device("cpu
 resnet.load_state_dict(checkpoint['model_state_dict'])
 
 resnet.eval()
-class VideoTransformer(VideoTransformerBase):
+class VideoTransformer(VideoProcessorBase):
     
         def __init__(self):
             self.canvas = None
@@ -46,7 +46,7 @@ class VideoTransformer(VideoTransformerBase):
 
             return frame
 def webcam():
-    webrtc_streamer(key="mask-detection",mode=WebRtcMode.SENDRECV, video_transformer_factory=VideoTransformer,client_settings=WEBRTC_CLIENT_SETTINGS,async_processing=True,)  
+    webrtc_streamer(key="mask-detection",mode=WebRtcMode.SENDRECV, video_processor_factory=VideoTransformer,client_settings=WEBRTC_CLIENT_SETTINGS,async_processing=True,)  
 
 def img_upload():
     uploaded_file = st.file_uploader("Choose an image...", type="jpg")
